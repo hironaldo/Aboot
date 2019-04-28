@@ -1,0 +1,38 @@
+# ************* server *************
+server:
+  port: 8868
+  tomcat:
+    uri-encoding: utf-8
+  # 设置请求和响应头的最大量 超过长度不予处理
+  max-http-header-size: 8192
+  use-forward-headers: true
+
+# ************* spring *************
+spring:
+  # datasource
+  profiles:
+    active: dev
+  # jpa
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+# ************* log *************
+logging:
+  level:
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
+
+# ************* 自定义配置 *************
+ronaldo:
+  # mysql 地址
+  datasource:
+    ip: 127.0.0.1
+    port: 3306
+    database: testdb
+
