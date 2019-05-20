@@ -112,7 +112,7 @@ public class DruidConfig {
         servletRegistrationBean.addInitParameter("deny", "192.168.0.19");
         //设置控制台管理用户
         servletRegistrationBean.addInitParameter("loginUsername", "admin");
-        servletRegistrationBean.addInitParameter("loginPassword", "root");
+        servletRegistrationBean.addInitParameter("loginPassword", "admin");
         //是否可以重置数据
         servletRegistrationBean.addInitParameter("resetEnable", "false");
         servletRegistrationBean.addInitParameter("logSlowSql", logSlowSql);
