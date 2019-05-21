@@ -14,7 +14,9 @@ import java.util.Map;
 public class ExceptionResponse {
 
     private Integer code;
+
     private String message;
+
     private Map<String, Object> request;
 
     public static ExceptionResponse create(Integer code, String message, Map<String, Object> request) {
