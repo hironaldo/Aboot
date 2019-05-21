@@ -29,7 +29,7 @@ public enum ResultCode {
 
     SUCCESS(10001, "SUCCESS【 操作成功\uD83D\uDE00 】"),
 
-    ERROR(10002, "ERROR【 操作异常\uD83D\uDE05 】"),
+    ERROR(10002, "ERROR【 操作失败\uD83D\uDE05 】"),
 
     SYSTEM_EXCEPTION(50001, "SYSTEM_EXCEPTION【 系统异常\uD83D\uDE2D 】"),
 
