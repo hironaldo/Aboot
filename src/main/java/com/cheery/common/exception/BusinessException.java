@@ -8,14 +8,20 @@ import lombok.Getter;
  */
 public class BusinessException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+    @Getter
+    private Integer status;
 
     @Getter
-    private Integer code;
+    private Exception e;
 
-    BusinessException(Integer code, String message) {
+    BusinessException(Integer status, String message) {
         super(message);
-        this.code = code;
+        this.status = status;
+    }
+
+    BusinessException(String message, Exception e) {
+        super(message);
+        this.e = e;
     }
 
 }

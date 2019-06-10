@@ -6,21 +6,21 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * desc:
+ * desc: 异常信息响应类
  * Created by FanYanGen on 2019/4/18 15:40
  */
 @Data
 @AllArgsConstructor
 public class ExceptionResponse {
 
-    private Integer code;
+    private Integer status;
 
     private String message;
 
-    private Map<String, Object> request;
+    private Map<String, Object> infos;
 
-    public static ExceptionResponse create(Integer code, String message, Map<String, Object> request) {
-        return new ExceptionResponse(code, message, request);
+    public static ExceptionResponse create(Integer status, String message, Map<String, Object> infos) {
+        return new ExceptionResponse(status, message, infos);
     }
 
 }

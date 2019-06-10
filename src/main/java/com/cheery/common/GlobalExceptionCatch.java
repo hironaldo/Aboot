@@ -29,13 +29,13 @@ public class GlobalExceptionCatch {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionResponse handleException(Exception ex) {
         Map<String, Object> map = Maps.newHashMap();
-        map.put("Time", new Date());
-        map.put("Url", request.getRequestURL());
-        map.put("Uri", request.getRequestURI());
-        map.put("HttpType", request.getMethod());
+        map.put("time", new Date());
+        map.put("url", request.getRequestURL());
+        map.put("uri", request.getRequestURI());
+        map.put("httpMethod", request.getMethod());
         if (ex instanceof BusinessException) {
             BusinessException be = (BusinessException) ex;
-            return ExceptionResponse.create(be.getCode(), be.getMessage(), map);
+            return ExceptionResponse.create(be.getStatus(), be.getMessage(), map);
         } else {
             return ExceptionResponse.create(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), map);
         }
