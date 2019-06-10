@@ -1,11 +1,9 @@
 package com.cheery.common.aop;
 
-import cn.hutool.core.lang.ObjectId;
-import com.alibaba.fastjson.JSON;
 import com.cheery.common.annotation.Operation;
-import com.cheery.entity.SysLogEntity;
+import com.cheery.entity.SysLog;
 import com.cheery.repository.LogRepository;
-import io.swagger.annotations.ApiOperation;
+import com.cheery.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Objects;
 import java.lang.reflect.Method;
 
@@ -41,7 +38,7 @@ public class SysLogAspect {
 
     private ThreadLocal<Long> startTime = new ThreadLocal<>();
 
-    private SysLogEntity sysLog = new SysLogEntity();
+    private SysLog sysLog = new SysLog();
 
     /**
      * 把切入点设置为自定义的注解
@@ -52,7 +49,7 @@ public class SysLogAspect {
 
     @Before("logPointCut()")
     public void saveSysLog(JoinPoint joinPoint) {
-        sysLog.setLogId(ObjectId.next());
+        sysLog.setLogId(UUIDUtil.snowFlakeUUID());
         sysLog.setUserId(0L);
         sysLog.setUserName("ronaldo");
         sysLog.setUserIp(request.getRemoteAddr());

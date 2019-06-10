@@ -20,7 +20,7 @@ public enum ResultCode {
      * 50003   未登录
      * 50004   没有访问权限
      * <p>
-     * 70001   数据不完整(参数缺失 / 参数溢出)
+     * 70001   数据不存在
      * 70002   数据校验失败 必传字段未传
      * 70003   非法数值
      * <p>
@@ -39,7 +39,7 @@ public enum ResultCode {
 
     NO_ACCESS_RIGHT(50004, "NO_ACCESS_RIGHT【 没有访问权限\uD83D\uDE1F 】"),
 
-    NO_COMPLETE_ARGUMENT(70001, "NO_COMPLETE_ARGUMENT【 参数缺失 / 参数溢出\uD83D\uDE23 】"),
+    NO_COMPLETE_ARGUMENT(70001, "DATA_NOT_FOUND【 数据不存在\uD83D\uDE23 】"),
 
     CHECK_FAILURE_ARGUMENT(70002, "CHECK_FAILURE_ARGUMENT【 数据校验失败\uD83D\uDE23 】"),
 

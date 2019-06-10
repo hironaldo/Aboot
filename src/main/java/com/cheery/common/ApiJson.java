@@ -54,7 +54,7 @@ public class ApiJson<T> {
      * @auther FanYanGen
      * @date 2019-05-21 20:51
      */
-    public static <T> ApiJson<T> success(T data) {
+    public static <T> ApiJson<T> result(T data) {
         return new ApiJson<>(ResultCode.SUCCESS.getStatus(), ResultCode.SUCCESS.getDesc(), data);
     }
 
