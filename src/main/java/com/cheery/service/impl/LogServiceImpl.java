@@ -4,7 +4,6 @@ import com.cheery.common.exception.NotFoundException;
 import com.cheery.repository.LogRepository;
 import com.cheery.service.LogService;
 import com.cheery.util.BeanUtil;
-import com.cheery.util.PageUtil;
 import com.cheery.vo.SysLogVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

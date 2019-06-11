@@ -1,6 +1,6 @@
 package com.cheery.common.aop;
 
-import com.cheery.common.annotation.Operation;
+import com.cheery.common.annotation.SystemLog;
 import com.cheery.entity.SysLog;
 import com.cheery.repository.LogRepository;
 import com.cheery.util.UUIDUtil;
@@ -14,12 +14,12 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Objects;
 import java.lang.reflect.Method;
-
 
 /**
  * desc: 系统日志：切面处理类
@@ -36,32 +36,37 @@ public class SysLogAspect {
     @Autowired
     private HttpServletRequest request;
 
-    private ThreadLocal<Long> startTime = new ThreadLocal<>();
-
-    private SysLog sysLog = new SysLog();
+    private SysLog sysLog = new com.cheery.entity.SysLog();
 
     /**
      * 把切入点设置为自定义的注解
      */
-    @Pointcut("@annotation(com.cheery.common.annotation.Operation)")
+    @Pointcut("@annotation(com.cheery.common.annotation.SystemLog)")
     public void logPointCut() {
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     @Before("logPointCut()")
     public void saveSysLog(JoinPoint joinPoint) {
-        sysLog.setLogId(UUIDUtil.snowFlakeUUID());
-        sysLog.setUserId(0L);
-        sysLog.setUserName("ronaldo");
-        sysLog.setUserIp(request.getRemoteAddr());
-        sysLog.setUserBrowser(request.getHeader("User-Agent"));
-        sysLog.setUri(request.getRequestURI());
-        sysLog.setUrl(request.getRequestURL().toString());
-        sysLog.setDescription(descriptionExpression(joinPoint));
-        sysLog.setParameter(Arrays.toString(joinPoint.getArgs()));
-        sysLog.setClassName(joinPoint.getSignature().getDeclaringTypeName());
-        sysLog.setMethod(joinPoint.getSignature().getName());
-        sysLog.setHttpType(request.getMethod());
-        logRepository.save(sysLog);
+        try {
+            sysLog.setLogId(UUIDUtil.snowFlakeUUID());
+            sysLog.setUserId(0L);
+            sysLog.setUserName("ronaldo");
+            sysLog.setUserIp(request.getRemoteAddr());
+            sysLog.setUserBrowser(request.getHeader("User-Agent"));
+            sysLog.setUri(request.getRequestURI());
+            sysLog.setUrl(request.getRequestURL().toString());
+            sysLog.setDescription(descriptionExpression(joinPoint));
+            sysLog.setParameter(Arrays.toString(joinPoint.getArgs()));
+            sysLog.setClassName(joinPoint.getSignature().getDeclaringTypeName());
+            sysLog.setMethod(joinPoint.getSignature().getName());
+            sysLog.setHttpType(request.getMethod());
+            sysLog.setUseTime(System.currentTimeMillis());
+            logRepository.save(sysLog);
+        } catch (Exception e) {
+            log.error("===== 日志记录异常 =====");
+            log.error("异常信息: {}", e.getMessage());
+        }
     }
 
     /**
@@ -69,20 +74,16 @@ public class SysLogAspect {
      */
     private String descriptionExpression(JoinPoint joinPoint) {
         Method currentMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        Operation methodCache = AnnotationUtils.getAnnotation(currentMethod, Operation.class);
+        SystemLog methodCache = AnnotationUtils.getAnnotation(currentMethod, SystemLog.class);
         return Objects.nonNull(methodCache) ? methodCache.value() : null;
     }
 
     /**
      * 设置方法请求时间
      */
-    @AfterReturning(pointcut = "logPointCut()", returning = "result")
-    private void interviewTime(Object result) {
-        long time = System.currentTimeMillis();
-        if (startTime.get() == null) {
-            startTime.set(time);
-        }
-        sysLog.setUseTime(time - startTime.get());
+    @AfterReturning(pointcut = "logPointCut()")
+    private void interviewTime() {
+        sysLog.setUseTime(System.currentTimeMillis() - sysLog.getUseTime());
     }
 
 }
