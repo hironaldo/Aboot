@@ -3,6 +3,7 @@ package com.cheery.common;
 import com.cheery.common.exception.BusinessException;
 import com.cheery.common.exception.ExceptionResponse;
 import com.google.common.collect.Maps;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,18 +21,21 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionCatch {
 
+    @Autowired
+    private HttpServletRequest request;
+
     @ResponseBody
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionResponse handleException(HttpServletRequest request, Exception ex) {
+    public ExceptionResponse handleException(Exception ex) {
         Map<String, Object> map = Maps.newHashMap();
-        map.put("Time", new Date());
-        map.put("Url", request.getRequestURL());
-        map.put("Uri", request.getRequestURI());
-        map.put("Method", request.getMethod());
+        map.put("time", new Date());
+        map.put("url", request.getRequestURL());
+        map.put("uri", request.getRequestURI());
+        map.put("httpMethod", request.getMethod());
         if (ex instanceof BusinessException) {
             BusinessException be = (BusinessException) ex;
-            return ExceptionResponse.create(be.getCode(), be.getMessage(), map);
+            return ExceptionResponse.create(be.getStatus(), be.getMessage(), map);
         } else {
             return ExceptionResponse.create(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), map);
         }

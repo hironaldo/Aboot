@@ -30,19 +30,31 @@ public class ApiJson<T> {
         return this.status.equals(ResultCode.SUCCESS.getStatus());
     }
 
-    public static <T> ApiJson<T> error() {
-        return new ApiJson<>(ResultCode.ERROR.getStatus(), ResultCode.ERROR.getDesc());
+    /**
+     * desc: 根据数据影响行数来判断操作是否成功
+     * 适用于 新增、修改、删除
+     *
+     * @param result 数据影响行数
+     * @auther FanYanGen
+     * @date 2019-05-21 20:50
+     */
+    public static <T> ApiJson<T> judgment(int result) {
+        if (result > 0) {
+            return new ApiJson<>(ResultCode.SUCCESS.getStatus(), ResultCode.SUCCESS.getDesc());
+        } else {
+            return new ApiJson<>(ResultCode.ERROR.getStatus(), ResultCode.ERROR.getDesc());
+        }
     }
 
-    public static <T> ApiJson<T> error(String message) {
-        return new ApiJson<>(ResultCode.ERROR.getStatus(), message);
-    }
-
-    public static <T> ApiJson<T> success() {
-        return new ApiJson<>(ResultCode.SUCCESS.getStatus(), ResultCode.SUCCESS.getDesc());
-    }
-
-    public static <T> ApiJson<T> success(T data) {
+    /**
+     * desc: 返回查询成功后的数据
+     * 适用于 查询
+     *
+     * @param data 数据
+     * @auther FanYanGen
+     * @date 2019-05-21 20:51
+     */
+    public static <T> ApiJson<T> result(T data) {
         return new ApiJson<>(ResultCode.SUCCESS.getStatus(), ResultCode.SUCCESS.getDesc(), data);
     }
 
